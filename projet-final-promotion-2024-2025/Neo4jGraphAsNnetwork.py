@@ -94,9 +94,9 @@ class NeuralNetworkManager:
                         math.sqrt(6) / math.sqrt(num_neurons_current + num_neurons_next)
                     )
                     tx.run("""
-                        MATCH (n1:Neuron {id: $from_id})
-                        MATCH (n2:Neuron {id: $to_id})
-                        CREATE (n1)-[:CONNECTED_TO {weight: $weight}]->(n2)
+                        MATCH (n1:Neuron {id: $from_id})                                 #
+                        MATCH (n2:Neuron {id: $to_id})                                   #   à faire
+                        CREATE (n1)-[:CONNECTED_TO {weight: $weight}]->(n2)              #
                     """, from_id=f"{layer_index}-{i}", to_id=f"{layer_index + 1}-{j}",
                            weight=weight)
         end_time = time.time()  # Record the end time
@@ -107,9 +107,9 @@ class NeuralNetworkManager:
     def create_inputs_row_node(tx, network_structure, batch_size):
         for _index in range(batch_size):
             tx.run("""
-                CREATE (n:Row {
-                    id: $id,
-                    type: 'inputsRow'})
+                CREATE (n:Row {                     #
+                    id: $id,                        #  à faire aussi
+                    type: 'inputsRow'})             #
                  """, id=f"{_index}")
         layer_index,num_neurons = 0,network_structure[0]
         for row_index in range(batch_size):
@@ -130,9 +130,9 @@ class NeuralNetworkManager:
     def create_outputs_row_node(tx, network_structure, batch_size):
         for _index in range(batch_size):
             tx.run("""
-                   CREATE (n:Row {
-                       id: $id,
-                       type: 'outputsRow'})
+                   CREATE (n:Row {                      #
+                       id: $id,                         # à faire
+                       type: 'outputsRow'})             #
                     """, id=f"{_index}")
         layer_index, num_neurons = len(network_structure) - 1, network_structure[len(network_structure) - 1]
         for row_index in range(batch_size):
@@ -149,7 +149,7 @@ class NeuralNetworkManager:
                        to_id=f"{row_index}", outputbyrowid=f"{row_index}_{neuron_index}",
                        value=0)
 
-
+#########################################################################################################
     @staticmethod
     def forward_pass(tx):
         '''MATCH (row:Row {type:'inputsRow'})-[r:CONTAINS]->(inputs:Neuron {type:'input'}) RETURN  row,r,inputs'''
@@ -161,7 +161,7 @@ class NeuralNetworkManager:
             (output:Neuron {type: 'output'})-[outputsValues_R:CONTAINS]->
             (row_for_outputs:Row {type:'outputsRow'})'''
         tx.run("""
-        
+        ##############################  ---------------------------- à faire ''''''''''''''''''''''''''''''''##############################
             MATCH (row_for_inputs:Row {type: 'inputsRow'})-[inputsValue_R:CONTAINS]->(input:Neuron {type: 'input'})
             MATCH (input)-[r1:CONNECTED_TO]->(hidden:Neuron {type: 'hidden'})
             MATCH (hidden)-[r2:CONNECTED_TO]->(output:Neuron {type: 'output'})
@@ -202,7 +202,7 @@ class NeuralNetworkManager:
                     END AS adjusted_output
                SET outputRow.output = adjusted_output
         """)
-
+######################################### ''''''''''''''''''''''  à faire --------------###########################
 
 
 
@@ -299,7 +299,7 @@ class NeuralNetworkManager:
                 MATCH (n:Neuron)
                 SET n.m_bias = 0.0, n.v_bias = 0.0
             """)
-
+298,304, 316, 324
     @staticmethod
     def constrain_weights(tx):
         tx.run("""
@@ -622,7 +622,7 @@ if __name__ == "__main__":
     # Initialize database manager and neural network manager
     uri = "bolt://localhost:7687"
     username = "neo4j"
-    password = ""
+    password = "Moubarakym@1006"
     database = "neuralnetwork"
 
     db_manager = Neo4jDatabaseManager(uri, username, password, database)
